@@ -1,0 +1,143 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Grading System</title>
+    <style>
+        /* Reset default browser styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            color: #333;
+            text-transform: uppercase;
+        }
+
+        td {
+            background-color: #fff;
+            color: #666;
+        }
+
+        .correct {
+            background-color: #d4edda;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Automated Grading System</h1>
+        <table id="grading-table">
+            <thead>
+                <tr>
+                    <th>Paper ID</th>
+                    <th>Paper Content</th>
+                    <th>Marks Obtained</th>
+                    <th>Automated Marks</th>
+                    <th>Correctly Graded</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be populated by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        // Sample data to simulate the dataset
+        const data = [
+            { Paper_id: 1, Paper_content: "APF is defined as the ratio of volume of atom in the unit cell to the volume of unit cell.", Marks_obtained: 3 },
+            { Paper_id: 2, Paper_content: "APF is space occupied by atoms in unit cell.", Marks_obtained: 2 },
+            // Add all other data entries here...
+        ];
+
+        // Define the grading function
+        function grade_apf_definition(content) {
+            content = content.toLowerCase();
+            if (content.includes("ratio of volume of atom") && content.includes("volume of unit cell")) {
+                return 3;
+            } else if (content.includes("ratio") && content.includes("volume of atom")) {
+                return 2;
+            } else if (content.includes("space occupied") || content.includes("total volume")) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        // Function to populate the table with data
+        function populateTable(data) {
+            const tableBody = document.querySelector('#grading-table tbody');
+            tableBody.innerHTML = '';
+
+            data.forEach(entry => {
+                const automatedMarks = grade_apf_definition(entry.Paper_content);
+                const correctlyGraded = entry.Marks_obtained === automatedMarks;
+
+                const row = document.createElement('tr');
+                row.classList.add(correctlyGraded ? 'correct' : 'incorrect');
+
+                row.innerHTML = `
+                    <td>${entry.Paper_id}</td>
+                    <td>${entry.Paper_content}</td>
+                    <td>${entry.Marks_obtained}</td>
+                    <td>${automatedMarks}</td>
+                    <td>${correctlyGraded ? 'Yes' : 'No'}</td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Populate the table on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            populateTable(data);
+        });
+    </script>
+</body>
+</html>
